@@ -12,5 +12,5 @@ A product of <ruby>
 
 ## Table of Contents
 
-* [CODE_OF_CONDUCT](/mirai-audio/mir/wiki/CODE_OF_CONDUCT)
-* [CONTRIBUTING](/mirai-audio/mir/blob/master/.github/CONTRIBUTING.md)
+* [CODE_OF_CONDUCT](https://github.com/mirai-audio/mir/wiki/CODE_OF_CONDUCT)
+* [CONTRIBUTING](https://github.com/mirai-audio/mir/blob/master/.github/CONTRIBUTING.md)
