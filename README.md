@@ -1,11 +1,4 @@
-# ai
-
-<ruby>
-  <ruby>
-    愛<rp>(</rp><rt>あい</rt><rp>)</rp> 
-  </ruby>
-  <rp>(</rp><rt>ai</rt><rp>)</rp>
-</ruby>
+# <ruby><ruby>愛<rp>(</rp><rt>あい</rt><rp>)</rp> </ruby><rp>(</rp><rt>ai</rt><rp>)</rp></ruby>
 
 A product of <ruby>
   <ruby>
