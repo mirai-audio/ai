@@ -1,4 +1,4 @@
-# 愛（あい) ai
+# ai
 
 <ruby>
   <ruby>
@@ -7,7 +7,7 @@
   <rp>(</rp><rt>ai</rt><rp>)</rp>
 </ruby>
 
-A product of Seishinkouki Co., Ltd / <ruby>
+A product of <ruby>
   <ruby>
     青<rp>(</rp><rt>せい</rt><rp>)</rp> 
     心<rp>(</rp><rt>しん</rt><rp>)</rp>
