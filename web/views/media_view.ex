@@ -1,17 +1,7 @@
 defmodule Ai.MediaView do
   use Ai.Web, :view
+  use JaSerializer.PhoenixView
 
-  def render("index.json", %{medias: medias}) do
-    %{data: render_many(medias, Ai.MediaView, "media.json")}
-  end
+  attributes [:title, :url, :inserted_at, :updated_at]
 
-  def render("show.json", %{media: media}) do
-    %{data: render_one(media, Ai.MediaView, "media.json")}
-  end
-
-  def render("media.json", %{media: media}) do
-    %{id: media.id,
-      title: media.title,
-      url: media.url}
-  end
 end

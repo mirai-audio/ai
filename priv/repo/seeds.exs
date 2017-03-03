@@ -12,5 +12,12 @@
 alias Ai.Repo
 alias Ai.Media
 
-Repo.insert!(%Media{title: "AKIRA - Kendas ThemeCreate the Phoenix App", url: "https://www.youtube.com/watch?v=hpDvtIt6Lsc"})
-Repo.insert!(%Media{title: "Kenji Kawai - Innocence [LIVE]", url: "https://www.youtube.com/watch?v=LqGq2QgDQR8"})
+Repo.insert!(%Media{
+  title: "AKIRA - Kendas Theme",
+  url: "https://www.youtube.com/watch?v=hpDvtIt6Lsc"
+})
+
+Repo.insert!(%Media{
+  title: "Kenji Kawai - Innocence [LIVE]",
+  url: "https://www.youtube.com/watch?v=LqGq2QgDQR8"
+})

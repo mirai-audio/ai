@@ -10,7 +10,7 @@ defmodule Ai.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json-api", "json"]
   end
 
   scope "/", Ai do
@@ -19,7 +19,7 @@ defmodule Ai.Router do
     get "/", PageController, :index
   end
 
-  scope "/", Ai do
+  scope "/api/v1", Ai do
     pipe_through :api
     resources "/medias", MediaController, except: [:new, :edit]
   end

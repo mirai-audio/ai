@@ -1,6 +1,12 @@
 defmodule Ai.Endpoint do
   use Phoenix.Endpoint, otp_app: :ai
 
+  plug Corsica, origins: "*"
+    # origin: ["https://mirai.audio", "http://localhost:3000", "http://localhost:4200"],
+    # max_age: 600,
+    # log: [rejected: :warn, invalid: :warn, accepted: :info],
+    # allow_headers: ["accept", "content-type", "authorization", "origin"]
+
   socket "/socket", Ai.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
