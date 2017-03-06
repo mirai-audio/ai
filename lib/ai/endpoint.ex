@@ -20,8 +20,6 @@ defmodule Ai.Endpoint do
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
-    socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
-    plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
   end
 
@@ -42,7 +40,7 @@ defmodule Ai.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_ai_key",
-    signing_salt: "ztUZhLva"
+    signing_salt: "hSgdosBb"
 
   plug Ai.Router
 end
