@@ -12,7 +12,7 @@ config :ai,
 # Configures the endpoint
 config :ai, Ai.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: System.get_env("SECRET_KEY_BASE") || "changeme",
+  secret_key_base: "changeme",  # override by an environment specific config
   render_errors: [view: Ai.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Ai.PubSub,
            adapter: Phoenix.PubSub.PG2]
@@ -24,8 +24,10 @@ config :logger, :console,
 
 config :phoenix, :format_encoders,
   "json-api": Poison
+
   config :mime, :types, %{
-    "application/vnd.api+json" => ["json-api"]
+    "application/vnd.api+json" => ["json-api"],
+    "application/json" => ["json"]
   }
 
 # Import environment specific config. This must remain at the bottom

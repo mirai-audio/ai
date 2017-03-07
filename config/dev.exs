@@ -24,8 +24,5 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :ai, Ai.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "ai_dev",
-  hostname: "localhost",
-  pool_size: 10
+  url: System.get_env("ENV_AI_DB_URL") || "ecto://postgres:postgres@localhost/ai_dev",
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")

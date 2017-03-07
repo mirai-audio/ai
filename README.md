@@ -73,6 +73,19 @@ Now you can visit [localhost:4000](localhost:4000) from your browser.
 
 * `mix test`
 
+
+## Deployment
+
+The following environment variables will need to be set.
+
+```bash
+ENV_AI_HOST=localhost
+ENV_AI_PORT=4000
+ENV_AI_SECRET_KEY_BASE=changeme
+ENV_AI_DB_URL=ecto://postgres:postgres@localhost/ai_dev
+ENV_AI_DB_POOL_SIZE=10
+```
+
 ## LICENSE
 
 [MIT](LICENSE)
