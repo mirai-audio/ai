@@ -1,6 +1,6 @@
 # ai <ruby>愛<rp>(</rp><rt>あい</rt><rp>)</rp></ruby>
 
-_JSON API powering mirai.audio_
+> Phoenix & Elixir JSON API powering mirai.audio.
 
 ## Docs
 
