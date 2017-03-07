@@ -2,6 +2,8 @@
 
 > Phoenix & Elixir JSON API powering mirai.audio.
 
+[![CircleCI](https://img.shields.io/circleci/project/github/mirai-audio/ai.svg?style=flat-square)](https://circleci.com/gh/mirai-audio/ai)
+
 ## Docs
 
 * [CODE_OF_CONDUCT](https://github.com/mirai-audio/mir/wiki/CODE_OF_CONDUCT)
@@ -62,16 +64,16 @@ mix run priv/repo/seeds.exs  # seed test data
 Run Phoenix:
 
 ```bash
-# generate a random 64-char key
-SECRET_KEY_BASE=`LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64 ; echo` \
-  mix phoenix.server
+mix phoenix.server
 ```
 
 Now you can visit [localhost:4000](localhost:4000) from your browser.
 
 ### Running Tests
 
-* `mix test`
+```bash
+mix test
+```
 
 
 ## Deployment
@@ -79,11 +81,11 @@ Now you can visit [localhost:4000](localhost:4000) from your browser.
 The following environment variables will need to be set.
 
 ```bash
-ENV_AI_HOST=localhost
+ENV_AI_SECRET_KEY_BASE=`LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64`
+ENV_AI_HOST=api.mirai.audio
 ENV_AI_PORT=4000
-ENV_AI_SECRET_KEY_BASE=changeme
 ENV_AI_DB_URL=ecto://postgres:postgres@localhost/ai_dev
-ENV_AI_DB_POOL_SIZE=10
+ENV_AI_DB_POOL_SIZE=20
 ```
 
 ## LICENSE

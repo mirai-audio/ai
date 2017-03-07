@@ -12,8 +12,5 @@ config :logger, level: :warn
 # Configure your database
 config :ai, Ai.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "ai_test",
-  hostname: "localhost",
+  url: System.get_env("ENV_AI_DB_URL") || "ecto://postgres:postgres@localhost/ai_test",
   pool: Ecto.Adapters.SQL.Sandbox
