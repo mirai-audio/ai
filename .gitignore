@@ -27,3 +27,4 @@ erl_crash.dump
 
 # local environment variables
 .env
+.python-version

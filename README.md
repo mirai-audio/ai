@@ -51,20 +51,31 @@ docker run -it -p 5432:5432 --rm \
   postgres
 ```
 
-To create the database schema and run migrations:
+
+### Environment variables
+
+The following environment variables are available to override fallback (dev)
+configuration, it works best to add them to a `.env` file.
 
 ```bash
-mix ecto.create  # create schema
-mix ecto.migrate  # run migrations
-
-# seed some test data
-mix run priv/repo/seeds.exs  # seed test data
+ENV_AI_MIR_URL=https://mirai.audio       # URL of Mir, frontend
+ENV_AI_DB_URL=ecto://postgres:postgres@localhost/ai_dev
+ENV_AI_HOST=api.mirai.audio
+ENV_AI_PORT=4000
+ENV_AI_SECRET_KEY_BASE=<64-char string>
+ENV_AI_GUARDIAN_SECRET_KEY=<64-char random string>
+ENV_AI_DB_POOL_SIZE=20
+ENV_AI_TWITTER_CONSUMER_KEY=changeme     # Twitter OAuth Consumer Key (API Key)
+ENV_AI_TWITTER_CONSUMER_SECRET=changeme  # Twitter OAuth Consumer Secret (API Secret)
 ```
 
-Run Phoenix:
+To create the database schema, run migrations and start Phoenix:
 
 ```bash
-mix phoenix.server
+# set .env file environment variables 
+export $(cat .env | xargs) && \
+  mix ecto.setup && \
+  mix phoenix.server
 ```
 
 Now you can visit [localhost:4000](localhost:4000) from your browser.
@@ -75,18 +86,6 @@ Now you can visit [localhost:4000](localhost:4000) from your browser.
 mix test
 ```
 
-
-## Deployment
-
-The following environment variables will need to be set.
-
-```bash
-ENV_AI_SECRET_KEY_BASE=`LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64`
-ENV_AI_HOST=api.mirai.audio
-ENV_AI_PORT=4000
-ENV_AI_DB_URL=ecto://postgres:postgres@localhost/ai_dev
-ENV_AI_DB_POOL_SIZE=20
-```
 
 ## LICENSE
 

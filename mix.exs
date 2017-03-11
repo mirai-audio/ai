@@ -4,7 +4,7 @@ defmodule Ai.Mixfile do
   def project do
     [app: :ai,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -20,13 +20,17 @@ defmodule Ai.Mixfile do
     [mod: {Ai, []},
      applications: [
        :phoenix,
+       :phoenix_html,
        :phoenix_pubsub,
        :cowboy,
        :logger,
        :gettext,
        :phoenix_ecto,
        :postgrex,
-       :corsica]]
+       :corsica,
+       :comeonin,
+       :oauth,
+       :ueberauth_twitter]]
   end
 
   # Specifies which paths to compile per environment.
@@ -37,14 +41,20 @@ defmodule Ai.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.2.1"},
+    [{:phoenix, "~> 1.2"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
-     {:postgrex, ">= 0.0.0"},
+     {:phoenix_html, "~> 2.6"},
+     {:postgrex, ">= 0.11.1"},
      {:gettext, "~> 0.11"},
      {:corsica, "~> 0.5"},
-     {:ja_serializer, "~> 0.11.2"},
-     {:cowboy, "~> 1.0"}]
+     {:ja_serializer, "~> 0.12"},
+     {:cowboy, "~> 1.0"},
+     {:guardian, "~> 0.14"},
+     {:comeonin, "~> 3.0"},
+     {:oauth, github: "tim/erlang-oauth"},
+     {:ueberauth, "~> 0.2"},
+     {:ueberauth_twitter, "~> 0.2"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

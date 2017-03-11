@@ -1,5 +1,9 @@
 use Mix.Config
 
+# General configuration
+config :ai,
+  mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
@@ -8,7 +12,6 @@ use Mix.Config
 # with brunch.io to recompile .js and .css sources.
 config :ai, Ai.Endpoint,
   http: [port: 4000],
-  debug_errors: true,
   code_reloader: true,
   check_origin: false,
   watchers: []

@@ -5,14 +5,16 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
+# General configuration
 config :ai,
-  ecto_repos: [Ai.Repo]
+  mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
 
 # Configures the endpoint
 config :ai, Ai.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "changeme",  # override by an environment specific config
+  secret_key_base:
+    System.get_env("ENV_AI_SECRET_KEY_BASE") ||
+      "aaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccdddd",  # overridden by dev/prod.exs
   render_errors: [view: Ai.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Ai.PubSub,
            adapter: Phoenix.PubSub.PG2]
@@ -22,6 +24,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Configure the Ecto Repos
+config :ai,
+  ecto_repos: [Ai.Repo]
+
 config :phoenix, :format_encoders,
   "json-api": Poison
 
@@ -29,6 +35,28 @@ config :phoenix, :format_encoders,
     "application/vnd.api+json" => ["json-api"],
     "application/json" => ["json"]
   }
+
+config :guardian, Guardian,
+  allowed_algos: ["HS512"], # optional
+  verify_module: Guardian.JWT,  # optional
+  issuer: "ai",
+  ttl: { 90, :days },
+  verify_issuer: true, # optional
+  secret_key: System.get_env("ENV_AI_GUARDIAN_SECRET_KEY") || "changeme",
+  serializer: Ai.GuardianSerializer
+
+config :ueberauth, Ueberauth,
+  base_path: "/login",
+  providers: [
+    twitter: {Ueberauth.Strategy.Twitter, []}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
+  request_path: "/auth/twitter",
+  callback_path: "/auth/twitter/callback",
+  consumer_key: System.get_env("ENV_AI_TWITTER_CONSUMER_KEY") || "changeme",
+  consumer_secret: System.get_env("ENV_AI_TWITTER_CONSUMER_SECRET") || "changeme",
+  redirect_uri: System.get_env("ENV_AI_TWITTER_REDIRECT_URI") || "http://localhost:4200/login"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
