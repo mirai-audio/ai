@@ -12,8 +12,32 @@ defmodule Ai.SessionController do
 
 
   def create(conn, %{"grant_type" => "password",
+                     "username" => "provider:twitter",
+                     "password" => provider_token}) do
+    case find_twitter_user(provider_token) do
+      {:ok, user, credential} ->
+        # Successful login
+        Logger.info("Twitter user '" <> credential.provider_uid <> "' logged in")
+        # Encode a JWT
+        {:ok, jwt, _} = Guardian.encode_and_sign(user, :token)
+
+        conn
+        |> json(%{access_token: jwt}) # Return token to the client
+
+      nil ->
+        "Unexpected error while attempting to login user."
+        |> Logger.error()
+
+        conn
+        |> put_status(401)
+        |> render(Ai.ErrorView, "401.json") # 401
+    end
+  end
+
+  def create(conn, %{"grant_type" => "password",
                      "username" => email,
                      "password" => password}) do
+    Logger.info("create: email")
     case find_user("email", email) do
       {:ok, user, credential} ->
         cond do
@@ -55,6 +79,23 @@ defmodule Ai.SessionController do
     case Repo.get_by(Credential,
                      provider: provider,
                      provider_uid: email) do
+      nil ->
+        # no user found, return nil
+        nil
+      credential ->
+        # return the user, {:ok, user}
+        credential =
+          credential
+          |> Repo.preload([:user])
+
+        {:ok, credential.user, credential}
+    end
+  end
+
+  defp find_twitter_user(provider_token) do
+    case Repo.get_by(Credential,
+                     provider: "twitter",
+                     provider_token: provider_token) do
       nil ->
         # no user found, return nil
         nil
