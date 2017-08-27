@@ -13,8 +13,8 @@ defmodule Ai.SessionController do
 
   def create(conn, %{"grant_type" => "password",
                      "username" => "provider:twitter",
-                     "password" => provider_token}) do
-    case find_twitter_user(provider_token) do
+                     "password" => social_token}) do
+    case find_twitter_user(social_token) do
       {:ok, user, credential} ->
         # Successful login
         Logger.info("Twitter user '" <> credential.provider_uid <> "' logged in")
@@ -37,7 +37,6 @@ defmodule Ai.SessionController do
   def create(conn, %{"grant_type" => "password",
                      "username" => email,
                      "password" => password}) do
-    Logger.info("create: email")
     case find_user("email", email) do
       {:ok, user, credential} ->
         cond do
@@ -92,9 +91,16 @@ defmodule Ai.SessionController do
     end
   end
 
-  defp find_twitter_user(provider_token) do
+  defp find_twitter_user(token) do
+    # parse credentials out of the token
+    {:ok,
+      provider_uid,
+      provider_token} = parse_twitter_credentials(token)
+
+    # get user from the database
     case Repo.get_by(Credential,
                      provider: "twitter",
+                     provider_uid: provider_uid,
                      provider_token: provider_token) do
       nil ->
         # no user found, return nil
@@ -107,5 +113,15 @@ defmodule Ai.SessionController do
 
         {:ok, credential.user, credential}
     end
+  end
+
+  defp parse_twitter_credentials(token) do
+    # token is constructed by combining the `provider_uid` and `provider_token`
+    # with a `::` character (e.g. "1234::a1B2c3")
+    [provider_uid, provider_token] = String.split(token, "::")
+
+    {:ok,
+      provider_uid,
+      provider_token}
   end
 end

@@ -30,7 +30,6 @@ defmodule Ai.LoginController do
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, params) do
     token = get_oauth_token(auth)
-    url = get_redirect_url(token)
     provider = Map.get(params, "provider")  # "twitter", "google", etc
     user_params = %{}
     user_changeset = User.changeset(%User{}, user_params)
@@ -38,6 +37,7 @@ defmodule Ai.LoginController do
 
     case find_or_create_user(user_changeset, credential_params) do
       {:ok, user} ->
+        url = get_redirect_url(credential_params.provider_uid, token)
         conn
         |> put_session(:current_user, user)
         |> redirect(external: url)
@@ -69,17 +69,27 @@ defmodule Ai.LoginController do
         # return the user
         {:ok, user}
       credential ->
-        user =
-          credential
-          |> Repo.preload([:user])
-        # return the user
-        {:ok, user}
+        # update the credential with the fresh OAuth token
+        credential = Ecto.Changeset.change credential, provider_token: credential_params.provider_token
+        case Repo.update credential do
+          {:ok, credential} ->
+            # preload the credential
+            user =
+              credential
+              |> Repo.preload([:user])
+            # return the user
+            {:ok, user}
+          {:error, changeset} ->
+            # Something went wrong
+            {:error, changeset}
+        end
     end
   end
 
   # Returns a URL to redirect for successful login
-  defp get_redirect_url(token) do
-    ["#{base_url()}/login", "?code=", token]
+  defp get_redirect_url(identity, token) do
+    code = "#{identity}::#{token}"
+    ["#{base_url()}/login", "?code=", code]
     |> IO.iodata_to_binary
   end
 
