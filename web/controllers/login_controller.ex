@@ -25,7 +25,7 @@ defmodule Ai.LoginController do
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     conn
-    |> redirect(external: "#{base_url()}/login?success=false")
+    |> redirect(external: get_failure_redirect_url())
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, params) do
@@ -88,8 +88,14 @@ defmodule Ai.LoginController do
 
   # Returns a URL to redirect for successful login
   defp get_redirect_url(identity, token) do
-    code = "#{identity}::#{token}"
-    ["#{base_url()}/login", "?code=", code]
+    code = "#{identity}::#{token}" # code is "<identity>::<token>"
+    ["#{base_url()}/torii/redirect.html", "?code=", code]
+    |> IO.iodata_to_binary
+  end
+
+  # Returns a URL to redirect for failed login
+  defp get_failure_redirect_url() do
+    ["#{base_url()}/login", "?success=", "false"]
     |> IO.iodata_to_binary
   end
 
