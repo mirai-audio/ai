@@ -12,29 +12,6 @@ defmodule Ai.SessionController do
 
 
   def create(conn, %{"grant_type" => "password",
-                     "username" => "provider:twitter",
-                     "password" => social_token}) do
-    case find_twitter_user(social_token) do
-      {:ok, user, credential} ->
-        # Successful login
-        Logger.info("Twitter user '" <> credential.provider_uid <> "' logged in")
-        # Encode a JWT
-        {:ok, jwt, _} = Guardian.encode_and_sign(user, :token)
-
-        conn
-        |> json(%{access_token: jwt}) # Return token to the client
-
-      nil ->
-        "Unexpected error while attempting to login user."
-        |> Logger.error()
-
-        conn
-        |> put_status(401)
-        |> render(Ai.ErrorView, "401.json") # 401
-    end
-  end
-
-  def create(conn, %{"grant_type" => "password",
                      "username" => email,
                      "password" => password}) do
     case find_user("email", email) do
@@ -67,6 +44,29 @@ defmodule Ai.SessionController do
     end
   end
 
+  def create(conn, %{"grant_type" => "token",
+                     "username" => provider_uid,
+                     "password" => token}) do
+    case find_twitter_user(provider_uid, token) do
+      {:ok, user, credential} ->
+        # Successful login
+        Logger.info("Twitter user '" <> credential.provider_uid <> "' logged in")
+        # Encode a JWT
+        {:ok, jwt, _} = Guardian.encode_and_sign(user, :token)
+
+        conn
+        |> json(%{access_token: jwt}) # Return JWT token to the client
+
+      nil ->
+        "Unexpected error while attempting to login user."
+        |> Logger.error()
+
+        conn
+        |> put_status(401)
+        |> render(Ai.ErrorView, "401.json") # 401
+    end
+  end
+
   def create(_conn, %{"grant_type" => _}) do
     ## Handle unknown grant type
     msg = "Unsupported grant_type"
@@ -91,17 +91,12 @@ defmodule Ai.SessionController do
     end
   end
 
-  defp find_twitter_user(token) do
-    # parse credentials out of the token
-    {:ok,
-      provider_uid,
-      provider_token} = parse_twitter_credentials(token)
-
+  defp find_twitter_user(uid, token) do
     # get user from the database
     case Repo.get_by(Credential,
                      provider: "twitter",
-                     provider_uid: provider_uid,
-                     provider_token: provider_token) do
+                     provider_uid: uid,
+                     provider_token: token) do
       nil ->
         # no user found, return nil
         nil
@@ -113,15 +108,5 @@ defmodule Ai.SessionController do
 
         {:ok, credential.user, credential}
     end
-  end
-
-  defp parse_twitter_credentials(token) do
-    # token is constructed by combining the `provider_uid` and `provider_token`
-    # with a `::` character (e.g. "1234::a1B2c3")
-    [provider_uid, provider_token] = String.split(token, "::")
-
-    {:ok,
-      provider_uid,
-      provider_token}
   end
 end
