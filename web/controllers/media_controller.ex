@@ -4,7 +4,7 @@ defmodule Ai.MediaController do
   alias Ai.Media
   alias JaSerializer.Params
 
-  plug :scrub_params, "data" when action in [:create, :update]
+  plug(:scrub_params, "data" when action in [:create, :update])
 
   def index(conn, _params) do
     medias = Repo.all(Media)
@@ -20,6 +20,7 @@ defmodule Ai.MediaController do
         |> put_status(:created)
         |> put_resp_header("location", media_path(conn, :show, media))
         |> render("show.json-api", data: media)
+
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -32,13 +33,17 @@ defmodule Ai.MediaController do
     render(conn, "show.json-api", data: media)
   end
 
-  def update(conn, %{"id" => id, "data" => data = %{"type" => "media", "attributes" => _media_params}}) do
+  def update(conn, %{
+        "id" => id,
+        "data" => data = %{"type" => "media", "attributes" => _media_params}
+      }) do
     media = Repo.get!(Media, id)
     changeset = Media.changeset(media, Params.to_attributes(data))
 
     case Repo.update(changeset) do
       {:ok, media} ->
         render(conn, "show.json-api", data: media)
+
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -55,5 +60,4 @@ defmodule Ai.MediaController do
 
     send_resp(conn, :no_content, "")
   end
-
 end

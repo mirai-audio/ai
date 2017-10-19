@@ -8,8 +8,7 @@ use Mix.Config
 # file or create a script for recreating it, since it's
 # kept out of version control and might be hard to recover
 # or recreate for your teammates (or you later on).
-config :ai, Ai.Endpoint,
-  secret_key_base: System.get_env("ENV_AI_SECRET_KEY_BASE") || "changeme"
+config :ai, Ai.Endpoint, secret_key_base: System.get_env("ENV_AI_SECRET_KEY_BASE") || "changeme"
 
 # Configure your database
 config :ai, Ai.Repo,

@@ -1,8 +1,7 @@
 use Mix.Config
 
 # General configuration
-config :ai,
-  mir_url: System.get_env("ENV_AI_MIR_URL") || "https://mirai.audio"
+config :ai, mir_url: System.get_env("ENV_AI_MIR_URL") || "https://mirai.audio"
 
 # For production, we configure the host to read the PORT
 # from the system environment. Therefore, you will need

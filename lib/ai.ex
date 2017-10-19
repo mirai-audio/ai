@@ -11,7 +11,7 @@ defmodule Ai do
       # Start the Ecto repository
       supervisor(Ai.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Ai.Endpoint, []),
+      supervisor(Ai.Endpoint, [])
       # Start your own worker by calling: Ai.Worker.start_link(arg1, arg2, arg3)
       # worker(Ai.Worker, [arg1, arg2, arg3]),
     ]

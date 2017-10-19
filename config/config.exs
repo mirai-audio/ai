@@ -6,18 +6,16 @@
 use Mix.Config
 
 # General configuration
-config :ai,
-  mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
+config :ai, mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
 
 # Configures the endpoint
+# overridden by dev/prod.exs
 config :ai, Ai.Endpoint,
   url: [host: "localhost"],
-  secret_key_base:
-    System.get_env("ENV_AI_SECRET_KEY_BASE") ||
-      "aaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccdddd",  # overridden by dev/prod.exs
+  secret_key_base: System.get_env("ENV_AI_SECRET_KEY_BASE") ||
+    "aaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccdddd",
   render_errors: [view: Ai.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Ai.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Ai.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -25,23 +23,22 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Configure the Ecto Repos
-config :ai,
-  ecto_repos: [Ai.Repo]
+config :ai, ecto_repos: [Ai.Repo]
 
-config :phoenix, :format_encoders,
-  "json-api": Poison
+config :phoenix, :format_encoders, "json-api": Poison
 
-  config :mime, :types, %{
-    "application/vnd.api+json" => ["json-api"],
-    "application/json" => ["json"]
-  }
+config :mime, :types, %{
+  "application/vnd.api+json" => ["json-api"],
+  "application/json" => ["json"]
+}
 
+# optional
 config :guardian, Guardian,
-  allowed_algos: ["HS512"], # optional
-  verify_module: Guardian.JWT,  # optional
+  allowed_algos: ["HS512"],
+  verify_module: Guardian.JWT,
   issuer: "ai",
-  ttl: { 90, :days },
-  verify_issuer: true, # optional
+  ttl: {90, :days},
+  verify_issuer: true,
   secret_key: System.get_env("ENV_AI_GUARDIAN_SECRET_KEY") || "changeme",
   serializer: Ai.GuardianSerializer
 
@@ -60,4 +57,4 @@ config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

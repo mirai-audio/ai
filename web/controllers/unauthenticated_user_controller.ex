@@ -4,15 +4,20 @@ defmodule Ai.UnauthenticatedUserController do
   alias Ai.Credential
   alias Ai.User
 
-
-  def create(conn, %{"data" => %{"type" => "users",
-                                 "attributes" => %{
-                                   "email" => email,
-                                   "password" => password,
-                                   "password-confirmation" => password_confirmation
-                                 }}}) do
-    user_params = %{}  # ToDo: username: username
+  def create(conn, %{
+        "data" => %{
+          "type" => "users",
+          "attributes" => %{
+            "email" => email,
+            "password" => password,
+            "password-confirmation" => password_confirmation
+          }
+        }
+      }) do
+    # ToDo: username: username
+    user_params = %{}
     user_changeset = User.changeset(%User{}, user_params)
+
     credential_params = %{
       provider: "email",
       provider_uid: email,
@@ -25,8 +30,8 @@ defmodule Ai.UnauthenticatedUserController do
         conn
         |> put_status(:created)
         |> render(Ai.UserView, "show.json", user: user)
+
       {:error, changeset} ->
-        IO.inspect changeset
         conn
         |> put_status(:unprocessable_entity)
         |> render(Ai.ChangesetView, "error.json", changeset: changeset)
@@ -34,22 +39,27 @@ defmodule Ai.UnauthenticatedUserController do
   end
 
   defp find_or_create_user(user_changeset, credential_params) do
-    case Repo.get_by(Credential,
-                     provider: credential_params.provider,
-                     provider_uid: credential_params.provider_uid) do
+    case Repo.get_by(
+           Credential,
+           provider: credential_params.provider,
+           provider_uid: credential_params.provider_uid
+         ) do
       nil ->
         # create and insert a new user
-        {:ok, user} = Repo.insert(user_changeset)  # insert user
+        # insert user
+        {:ok, user} = Repo.insert(user_changeset)
+
         credential_params =
           credential_params
           |> Map.put(:user_id, user.id)
 
         # create and insert a new credential for that user
         Credential.email_changeset(%Credential{}, credential_params)
-        |> Repo.insert
+        |> Repo.insert()
 
         # return the user
         {:ok, user}
+
       credential ->
         # return the user, {:ok, user}
         Repo.preload(credential, [:user])

@@ -1,8 +1,7 @@
 use Mix.Config
 
 # General configuration
-config :ai,
-  mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
+config :ai, mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -15,7 +14,6 @@ config :ai, Ai.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: []
-
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

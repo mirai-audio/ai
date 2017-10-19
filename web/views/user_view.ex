@@ -10,9 +10,11 @@ defmodule Ai.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{"type": "user",
-      "id": user.id,
-      "attributes": %{} # "email": user.email
+    %{
+      type: "user",
+      id: user.id,
+      # "email": user.email
+      attributes: %{}
     }
   end
 end

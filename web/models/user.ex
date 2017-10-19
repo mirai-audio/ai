@@ -3,11 +3,10 @@ defmodule Ai.User do
 
   alias Ai.Credential
 
-
   schema "users" do
-    field :username, :string
+    field(:username, :string)
 
-    has_many :credentials, Credential
+    has_many(:credentials, Credential)
 
     timestamps()
   end

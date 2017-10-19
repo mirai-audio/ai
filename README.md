@@ -1,8 +1,9 @@
 # ai <ruby>愛<rp>(</rp><rt>あい</rt><rp>)</rp></ruby>
 
-> Phoenix & Elixir JSON API powering mirai.audio.
-
 [![CircleCI](https://img.shields.io/circleci/project/github/mirai-audio/ai.svg?style=flat-square)](https://circleci.com/gh/mirai-audio/ai)
+[![Coveralls branch](https://img.shields.io/coveralls/mirai-audio/ai/master.svg?style=flat-square)](https://coveralls.io/github/mirai-audio/ai?branch=master)
+
+_Phoenix & Elixir JSON API powering mirai.audio_
 
 ## Docs
 

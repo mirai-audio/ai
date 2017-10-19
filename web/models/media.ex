@@ -2,8 +2,8 @@ defmodule Ai.Media do
   use Ai.Web, :model
 
   schema "medias" do
-    field :title, :string
-    field :url, :string
+    field(:title, :string)
+    field(:url, :string)
 
     timestamps()
   end

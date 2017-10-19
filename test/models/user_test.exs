@@ -3,7 +3,6 @@ defmodule Ai.UserTest do
 
   alias Ai.User
 
-
   @valid_attrs %{username: "a@bb.cc"}
   @valid_attrs_emoji %{username: "a🍔🎉.🍔🎉"}
   @invalid_attrs_empty %{}
