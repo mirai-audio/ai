@@ -1,13 +1,10 @@
-defmodule Ai.SessionController do
+defmodule AiWeb.SessionController do
   @moduledoc """
   Session controller handles email login requests.
   """
-  use Ai.Web, :controller
-
+  use AiWeb, :controller
   alias Ai.Credential
-
   import Comeonin.Bcrypt
-
   require Logger
 
   def create(conn, %{"grant_type" => "password", "username" => email, "password" => password}) do
@@ -31,7 +28,7 @@ defmodule Ai.SessionController do
             # 401
             conn
             |> put_status(401)
-            |> render(Ai.ErrorView, "401.json")
+            |> render(AiWeb.ErrorView, "401.json")
         end
 
       nil ->
@@ -64,7 +61,7 @@ defmodule Ai.SessionController do
         # 401
         conn
         |> put_status(401)
-        |> render(Ai.ErrorView, "401.json")
+        |> render(AiErrorView, "401.json")
     end
   end
 

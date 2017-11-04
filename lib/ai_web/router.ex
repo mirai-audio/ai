@@ -1,5 +1,5 @@
-defmodule Ai.Router do
-  use Ai.Web, :router
+defmodule AiWeb.Router do
+  use AiWeb, :router
   require Ueberauth
 
   # unauthenticated requests
@@ -11,7 +11,7 @@ defmodule Ai.Router do
     plug(:accepts, ["json-api", "json"])
     plug(Guardian.Plug.VerifyHeader, realm: "Bearer")
     plug(Guardian.Plug.LoadResource)
-    plug(Guardian.Plug.EnsureAuthenticated, handler: Ai.AuthErrorHandler)
+    plug(Guardian.Plug.EnsureAuthenticated, handler: AiWeb.AuthErrorHandler)
   end
 
   pipeline :browser do
@@ -22,7 +22,7 @@ defmodule Ai.Router do
     plug(:put_secure_browser_headers)
   end
 
-  scope "/login", Ai do
+  scope "/login", AiWeb do
     pipe_through([:browser])
 
     get("/:provider", LoginController, :request)
@@ -31,7 +31,7 @@ defmodule Ai.Router do
     delete("/logout", LoginController, :delete)
   end
 
-  scope "/api/v1", Ai do
+  scope "/api/v1", AiWeb do
     pipe_through(:api)
 
     # user signup / registration
@@ -43,7 +43,7 @@ defmodule Ai.Router do
     resources("/medias", MediaController, except: [:new, :edit])
   end
 
-  scope "/api/v1", Ai do
+  scope "/api/v1", AiWeb do
     pipe_through(:api_auth)
     get("/users/current", UserController, :current)
   end

@@ -1,7 +1,8 @@
 use Mix.Config
 
 # General configuration
-config :ai, mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
+config :ai,
+  mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -9,7 +10,7 @@ config :ai, mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
-config :ai, Ai.Endpoint,
+config :ai, AiWeb.Endpoint,
   http: [port: 4000],
   code_reloader: true,
   check_origin: false,

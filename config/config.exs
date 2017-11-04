@@ -10,11 +10,11 @@ config :ai, mir_url: System.get_env("ENV_AI_MIR_URL") || "http://localhost:4200"
 
 # Configures the endpoint
 # overridden by dev/prod.exs
-config :ai, Ai.Endpoint,
+config :ai, AiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: System.get_env("ENV_AI_SECRET_KEY_BASE") ||
     "aaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccdddd",
-  render_errors: [view: Ai.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: AiWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Ai.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
@@ -40,7 +40,7 @@ config :guardian, Guardian,
   ttl: {90, :days},
   verify_issuer: true,
   secret_key: System.get_env("ENV_AI_GUARDIAN_SECRET_KEY") || "changeme",
-  serializer: Ai.GuardianSerializer
+  serializer: AiWeb.GuardianSerializer
 
 config :ueberauth, Ueberauth,
   base_path: "/login",

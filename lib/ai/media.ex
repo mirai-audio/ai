@@ -1,5 +1,7 @@
 defmodule Ai.Media do
-  use Ai.Web, :model
+  use Ecto.Schema
+  import Ecto.Changeset
+
 
   schema "medias" do
     field(:title, :string)

@@ -1,5 +1,7 @@
-defmodule Ai.Endpoint do
+defmodule AiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :ai
+
+  socket("/socket", AiWeb.UserSocket)
 
   plug(
     Corsica,
@@ -14,7 +16,6 @@ defmodule Ai.Endpoint do
     allow_headers: ["accept", "content-type", "authorization", "origin"]
   )
 
-  socket("/socket", Ai.UserSocket)
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -57,5 +58,5 @@ defmodule Ai.Endpoint do
     signing_salt: "hSgdosBb"
   )
 
-  plug(Ai.Router)
+  plug(AiWeb.Router)
 end

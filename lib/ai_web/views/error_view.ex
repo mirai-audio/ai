@@ -1,5 +1,5 @@
-defmodule Ai.ErrorView do
-  use Ai.Web, :view
+defmodule AiWeb.ErrorView do
+  use AiWeb, :view
   use JaSerializer.PhoenixView
 
   def render("404.html", _assigns) do

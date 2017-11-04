@@ -1,7 +1,8 @@
 defmodule Ai.Credential do
-  use Ai.Web, :model
-
+  use Ecto.Schema
+  import Ecto.Changeset
   alias Ai.User
+
 
   schema "credentials" do
     belongs_to(:user, User)

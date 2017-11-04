@@ -1,5 +1,5 @@
-defmodule Ai.ChangesetView do
-  use Ai.Web, :view
+defmodule AiWeb.ChangesetView do
+  use AiWeb, :view
 
   @doc """
   Traverses and translates changeset errors.

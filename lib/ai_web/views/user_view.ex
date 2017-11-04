@@ -1,12 +1,12 @@
-defmodule Ai.UserView do
-  use Ai.Web, :view
+defmodule AiWeb.UserView do
+  use AiWeb, :view
 
   def render("index.json", %{users: users}) do
-    %{data: render_many(users, Ai.UserView, "user.json")}
+    %{data: render_many(users, AiWeb.UserView, "user.json")}
   end
 
   def render("show.json", %{user: user}) do
-    %{data: render_one(user, Ai.UserView, "user.json")}
+    %{data: render_one(user, AiWeb.UserView, "user.json")}
   end
 
   def render("user.json", %{user: user}) do

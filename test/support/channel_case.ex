@@ -1,4 +1,4 @@
-defmodule Ai.ChannelCase do
+defmodule AiWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -26,7 +26,7 @@ defmodule Ai.ChannelCase do
       import Ecto.Query
 
       # The default endpoint for testing
-      @endpoint Ai.Endpoint
+      @endpoint AiWeb.Endpoint
     end
   end
 

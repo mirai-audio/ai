@@ -1,4 +1,4 @@
-defmodule Ai.Gettext do
+defmodule AiWeb.Gettext do
   @moduledoc """
   A module providing Internationalization with a gettext-based API.
 

@@ -1,5 +1,5 @@
-defmodule Ai.UnauthenticatedUserController do
-  use Ai.Web, :controller
+defmodule AiWeb.UnauthenticatedUserController do
+  use AiWeb, :controller
 
   alias Ai.Credential
   alias Ai.User
@@ -29,12 +29,12 @@ defmodule Ai.UnauthenticatedUserController do
       {:ok, user} ->
         conn
         |> put_status(:created)
-        |> render(Ai.UserView, "show.json", user: user)
+        |> render(AiWeb.UserView, "show.json", user: user)
 
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Ai.ChangesetView, "error.json", changeset: changeset)
+        |> render(AiWeb.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

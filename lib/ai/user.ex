@@ -1,7 +1,8 @@
 defmodule Ai.User do
-  use Ai.Web, :model
-
+  use Ecto.Schema
+  import Ecto.Changeset
   alias Ai.Credential
+
 
   schema "users" do
     field(:username, :string)

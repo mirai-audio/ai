@@ -1,8 +1,8 @@
-defmodule Ai.LoginController do
+defmodule AiWeb.LoginController do
   @moduledoc """
   Login controller handles social login responses via Ueberauth.
   """
-  use Ai.Web, :controller
+  use AiWeb, :controller
 
   plug(Ueberauth)
 

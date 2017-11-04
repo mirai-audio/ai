@@ -1,5 +1,5 @@
-defmodule Ai.MediaControllerTest do
-  use Ai.ConnCase
+defmodule AiWeb.MediaControllerTest do
+  use AiWeb.ConnCase
 
   alias Ai.Media
   alias Ai.Repo

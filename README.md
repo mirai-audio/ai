@@ -2,13 +2,17 @@
 
 [![CircleCI](https://img.shields.io/circleci/project/github/mirai-audio/ai.svg?style=flat-square)](https://circleci.com/gh/mirai-audio/ai)
 [![Coveralls branch](https://img.shields.io/coveralls/mirai-audio/ai/master.svg?style=flat-square)](https://coveralls.io/github/mirai-audio/ai?branch=master)
+[![Phoenix](https://img.shields.io/badge/Phoenix-1.3-blue.svg?style=flat-square)](http://phoenixframework.org/)
+[![StackShare](https://img.shields.io/badge/stack-share-0690fa.svg?style=flat-square)](https://stackshare.io/mirai-audio/mirai-audio)
 
 _Phoenix & Elixir JSON API powering mirai.audio_
+
 
 ## Docs
 
 * [CODE_OF_CONDUCT](https://github.com/mirai-audio/mir/wiki/CODE_OF_CONDUCT)
 * [CONTRIBUTING](https://github.com/mirai-audio/mir/blob/master/.github/CONTRIBUTING.md)
+
 
 ## Prerequisites
 
@@ -24,20 +28,6 @@ mix local.hex  # install hex package manager
 brew cask install docker  # used to run PostgreSQL
 ```
 
-These are done when bootstrapping a new Phoenix project.
-
-```bash
-mix local.hex --force && \  # install hex package manager
-  mix local.rebar --force
-# install phoenix framework
-mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez
-mix project.new .  # scaffold a new Phoenix project
-
-# generate a json-api endpoint for a model
-mix ja_serializer.gen.phoenix_api \
-  <Model_name> <model_names> \
-  <column_name>:<type> [<column_name>:<type>]
-```
 
 ## Running / Development
 
@@ -76,7 +66,7 @@ To create the database schema, run migrations and start Phoenix:
 # set .env file environment variables 
 export $(cat .env | xargs) && \
   mix ecto.setup && \
-  mix phoenix.server
+  mix phx.server
 ```
 
 Now you can visit [localhost:4000](localhost:4000) from your browser.
@@ -101,4 +91,3 @@ A product of <ruby>
   </ruby>
   <rp>(</rp><rt>seishinkouki</rt><rp>)</rp>
 </ruby> Co., Ltd
-

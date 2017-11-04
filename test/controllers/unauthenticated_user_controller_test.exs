@@ -1,5 +1,5 @@
-defmodule Ai.UnauthenticatedUserControllerTest do
-  use Ai.ConnCase
+defmodule AiWeb.UnauthenticatedUserControllerTest do
+  use AiWeb.ConnCase
 
   alias Ai.Credential
 

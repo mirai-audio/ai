@@ -1,4 +1,4 @@
-defmodule Ai.GuardianSerializer do
+defmodule AiWeb.GuardianSerializer do
   @behaviour Guardian.Serializer
 
   alias Ai.Repo

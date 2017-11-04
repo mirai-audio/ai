@@ -11,7 +11,7 @@ defmodule Ai do
       # Start the Ecto repository
       supervisor(Ai.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Ai.Endpoint, [])
+      supervisor(AiWeb.Endpoint, [])
       # Start your own worker by calling: Ai.Worker.start_link(arg1, arg2, arg3)
       # worker(Ai.Worker, [arg1, arg2, arg3]),
     ]
@@ -25,7 +25,7 @@ defmodule Ai do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    Ai.Endpoint.config_change(changed, removed)
+    AiWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

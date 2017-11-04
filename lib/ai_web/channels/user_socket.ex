@@ -1,4 +1,4 @@
-defmodule Ai.UserSocket do
+defmodule AiWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels

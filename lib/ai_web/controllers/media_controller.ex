@@ -1,5 +1,5 @@
-defmodule Ai.MediaController do
-  use Ai.Web, :controller
+defmodule AiWeb.MediaController do
+  use AiWeb, :controller
 
   alias Ai.Media
   alias JaSerializer.Params

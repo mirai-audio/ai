@@ -1,4 +1,4 @@
-defmodule Ai.ConnCase do
+defmodule AiWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -25,10 +25,10 @@ defmodule Ai.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      import Ai.Router.Helpers
+      import AiWeb.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint Ai.Endpoint
+      @endpoint AiWeb.Endpoint
     end
   end
 
