@@ -7,6 +7,7 @@ defmodule AiWeb.Endpoint do
     Corsica,
     origins: [
       "https://mirai.audio",
+      "https://api.mirai.audio",
       "https://app.mirai.audio",
       "http://localhost:3000",
       "http://localhost:4200"

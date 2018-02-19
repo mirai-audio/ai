@@ -3,13 +3,10 @@ defmodule AiWeb.LoginController do
   Login controller handles social login responses via Ueberauth.
   """
   use AiWeb, :controller
-
   plug(Ueberauth)
-
   alias Ai.Credential
   alias Ai.User
   alias Ueberauth.Strategy.Helpers
-
   require Logger
 
   def request(conn, _params) do
@@ -31,6 +28,8 @@ defmodule AiWeb.LoginController do
     token = get_oauth_token(auth)
     # "twitter", "google", etc
     provider = Map.get(params, "provider")
+
+    # ToDo: assign a default username: username
     user_params = %{}
     user_changeset = User.changeset(%User{}, user_params)
     credential_params = get_credential_params(auth, provider, token)
@@ -57,15 +56,12 @@ defmodule AiWeb.LoginController do
            provider_uid: credential_params.provider_uid
          ) do
       nil ->
-        # create and insert a new user
-        # insert user
-        user = Repo.insert(user_changeset)
-        {:ok, %User{id: user_id}} = user
+        # no user credential was found, insert a new user
+        {:ok, user} = Repo.insert(user_changeset)
 
-        # update credential_params with user_id
         credential_params =
           credential_params
-          |> Map.put(:user_id, user_id)
+          |> Map.put(:user_id, user.id)
 
         # create and insert a new credential for that user
         Credential.social_changeset(%Credential{}, credential_params)
@@ -75,16 +71,17 @@ defmodule AiWeb.LoginController do
         {:ok, user}
 
       credential ->
-        # update the credential with the fresh OAuth token
+        # a credential was found from the OAuth provider with the same uid. User
+        # has previously logged in.
         credential =
           Ecto.Changeset.change(credential, provider_token: credential_params.provider_token)
 
+        # OAuth provider typically sends a fresh OAuth token. Update credential
+        # with the fresh one to lower the incidence of stale or expired tokens.
         case Repo.update(credential) do
           {:ok, credential} ->
             # preload the credential
-            user =
-              credential
-              |> Repo.preload([:user])
+            user = credential |> Repo.preload([:user])
 
             # return the user
             {:ok, user}

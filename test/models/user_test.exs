@@ -7,7 +7,9 @@ defmodule Ai.UserTest do
   @valid_attrs_emoji %{username: "a🍔🎉.🍔🎉"}
   @invalid_attrs_empty %{}
   @invalid_attrs_nil %{username: nil}
-  @invalid_attrs_too_long %{username: "1234567890123456"}
+  @invalid_attrs_too_long %{
+    username: "123456789012345678901234567890123456789012345678901" # 51 chars
+  }
 
   test "changeset with valid attributes: a@bb.cc" do
     changeset = User.changeset(%User{}, @valid_attrs)

@@ -13,7 +13,7 @@ defmodule AiWeb.SessionController do
         cond do
           checkpw(password, credential.password_hash) ->
             # Successful login
-            Logger.info("User '" <> email <> "' logged in")
+            Logger.info("authentication success for: '#{email}'.")
             # Encode a JWT
             {:ok, jwt, _} = Guardian.encode_and_sign(user, :token)
 
@@ -23,22 +23,21 @@ defmodule AiWeb.SessionController do
 
           true ->
             # Unsuccessful login
-            Logger.warn("User '" <> email <> "' failed to login")
+            Logger.warn("authentication attempt with wrong password for: '#{email}'.")
 
             # 401
             conn
             |> put_status(401)
-            |> render(AiWeb.ErrorView, "401.json")
+            |> render(:errors, data: [%{code: 401, detail: nil}])
         end
-
       nil ->
-        ("Unexpected error while attempting to login user '" <> email <> "'.")
-        |> Logger.error()
+        # user tried to login with email that does not exist
+        Logger.warn("authentication attempt with non-existant user: '#{email}'.")
 
         # 401
         conn
         |> put_status(401)
-        |> render(Ai.ErrorView, "401.json")
+        |> render(:errors, data: [%{code: 401, detail: nil}])
     end
   end
 
@@ -55,7 +54,7 @@ defmodule AiWeb.SessionController do
         |> json(%{access_token: jwt})
 
       nil ->
-        "Unexpected error while attempting to login user."
+        ("User '" <> provider_uid <> "' not found.")
         |> Logger.error()
 
         # 401
@@ -66,7 +65,7 @@ defmodule AiWeb.SessionController do
   end
 
   def create(_conn, %{"grant_type" => _}) do
-    ## Handle unknown grant type
+    # Handle unknown grant type
     msg = "Unsupported grant_type"
     Logger.error(msg)
     throw(msg)

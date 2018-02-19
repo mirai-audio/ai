@@ -19,19 +19,20 @@ _Phoenix & Elixir JSON API powering mirai.audio_
 You will need the following tools properly installed:
 
 * [Git](https://git-scm.com/)
-* [Elixir](http://elixir-lang.org/)
+* [Elixir](http://elixir-lang.org/install.html)
 * [Docker](https://www.docker.com/)
 
 ```bash
-brew install elixir  # installs Erlang & Elixir
-mix local.hex  # install hex package manager
-brew cask install docker  # used to run PostgreSQL
+# macOS
+brew install elixir       # installs Erlang & Elixir
+brew cask install docker  # required to run PostgreSQL
+mix local.hex             # install hex package manager
 ```
 
 
 ## Running / Development
 
-Run the PostgreSQL db server (via Docker)
+Run the PostgreSQL db server in Docker.
 
 ```bash
 docker run -it -p 5432:5432 --rm \

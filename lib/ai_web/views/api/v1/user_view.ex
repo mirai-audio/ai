@@ -1,4 +1,4 @@
-defmodule AiWeb.UserView do
+defmodule AiWeb.API.V1.UserView do
   use AiWeb, :view
   use JaSerializer.PhoenixView
 

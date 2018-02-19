@@ -25,6 +25,7 @@ defmodule AiWeb.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
+      import Ai.TestHelpers
       import AiWeb.Router.Helpers
 
       # The default endpoint for testing

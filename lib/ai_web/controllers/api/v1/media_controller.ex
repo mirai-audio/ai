@@ -1,21 +1,40 @@
-defmodule AiWeb.MediaController do
+defmodule AiWeb.API.V1.MediaController do
   use AiWeb, :controller
-
   alias Ai.Media
+  alias Ai.Medias
   alias JaSerializer.Params
+  require Logger
 
   plug(:scrub_params, "data" when action in [:create, :update])
 
   def index(conn, _params) do
-    medias = Repo.all(Media)
+    user =
+      conn
+      |> Guardian.Plug.current_resource()
+
+    query = Media
+    query = from m in query, where: m.user_id == ^user.id
+    query = from m in query, order_by: m.title
+    query = from m in query, preload: :user
+    medias = Repo.all(query)
+
     render(conn, "index.json-api", data: medias)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "media", "attributes" => _media_params}}) do
-    changeset = Media.changeset(%Media{}, Params.to_attributes(data))
+  def create(conn, %{"data" => data = %{"type" => "medias", "attributes" => _media_params}}) do
+    user =
+      conn
+      |> Guardian.Plug.current_resource()
+
+    changeset =
+      user
+      |> Ecto.build_assoc(:medias)
+      |> Media.changeset(Params.to_attributes(data))
 
     case Repo.insert(changeset) do
       {:ok, media} ->
+        Logger.info("created new media '#{media.title}'.")
+
         conn
         |> put_status(:created)
         |> put_resp_header("location", media_path(conn, :show, media))
@@ -35,7 +54,7 @@ defmodule AiWeb.MediaController do
 
   def update(conn, %{
         "id" => id,
-        "data" => data = %{"type" => "media", "attributes" => _media_params}
+        "data" => data = %{"type" => "medias", "attributes" => _media_params}
       }) do
     media = Repo.get!(Media, id)
     changeset = Media.changeset(media, Params.to_attributes(data))
@@ -52,12 +71,14 @@ defmodule AiWeb.MediaController do
   end
 
   def delete(conn, %{"id" => id}) do
-    media = Repo.get!(Media, id)
+    user =
+      conn
+      |> Guardian.Plug.current_resource()
 
-    # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
-    Repo.delete!(media)
+    media = Medias.get_media!(user, id)
+    {:ok, _media} = Medias.delete_media(media)
 
+    # http://jsonapi.org/format/#crud-deleting-responses-204
     send_resp(conn, :no_content, "")
   end
 end

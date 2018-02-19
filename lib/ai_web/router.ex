@@ -2,13 +2,18 @@ defmodule AiWeb.Router do
   use AiWeb, :router
   require Ueberauth
 
-  # unauthenticated requests
+  # unauthenticated API requests
   pipeline :api do
     plug(:accepts, ["json-api", "json"])
   end
 
-  pipeline :api_auth do
+  # strict JSON API requests
+  pipeline :json_api do
     plug(:accepts, ["json-api", "json"])
+    plug JaSerializer.ContentTypeNegotiation
+  end
+
+  pipeline :authenticated do
     plug(Guardian.Plug.VerifyHeader, realm: "Bearer")
     plug(Guardian.Plug.LoadResource)
     plug(Guardian.Plug.EnsureAuthenticated, handler: AiWeb.AuthErrorHandler)
@@ -35,16 +40,15 @@ defmodule AiWeb.Router do
     pipe_through(:api)
 
     # user signup / registration
-    post("/users", UnauthenticatedUserController, :create)
+    post("/users", UserController, :create)
     # user authentication
     post("/users/token", SessionController, :create, as: :login)
-
-    # media
-    resources("/medias", MediaController, except: [:new, :edit])
   end
 
-  scope "/api/v1", AiWeb do
-    pipe_through(:api_auth)
+  scope "/api/v1", AiWeb.API.V1 do
+    pipe_through([:json_api, :authenticated])
+
+    resources("/medias", MediaController, except: [:new, :edit])
     get("/users/current", UserController, :current)
   end
 end

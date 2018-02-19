@@ -14,7 +14,7 @@ config :ai, AiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: System.get_env("ENV_AI_SECRET_KEY_BASE") ||
     "aaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccddddaaaabbbbccccdddd",
-  render_errors: [view: AiWeb.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: AiWeb.ErrorView, accepts: ~w(html json json-api)],
   pubsub: [name: Ai.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

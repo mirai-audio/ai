@@ -1,4 +1,4 @@
-defmodule AiWeb.MediaView do
+defmodule AiWeb.API.V1.MediaView do
   use AiWeb, :view
   use JaSerializer.PhoenixView
 

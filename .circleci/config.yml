@@ -2,40 +2,40 @@ version: 2
 
 jobs:
   build:
-    working_directory: ~/app
-
     docker:
       - image: circleci/elixir:latest
       - image: postgres:9.6.5
         environment:
           POSTGRES_USER: postgres
-
+    working_directory: ~/app
     steps:
-      - run:
-          name: Configure build environment
-          command: |
-            git config --global user.email "$CIRCLECI_EMAIL"
-            git config --global user.name "Circle CI Build Bot"
       - checkout
       - run: mix local.hex --force
       - run: mix local.rebar --force
       - restore_cache:
           keys:
-            - dependency-cache-{{checksum "mix.lock"}}
+            - dependency-cache-{{.Branch}}-{{checksum "mix.lock"}}
             - dependency-cache-{{.Branch}}
+            - dependency-cache-
       - run: mix deps.get
       - save_cache:
-          key: dependency-cache-{{checksum "mix.lock"}}
+          key: dependency-cache-{{.Branch}}-{{checksum "mix.lock"}}
           paths:
             - deps
       - run: mix compile
       - run: MIX_ENV=test mix compile
       - run: MIX_ENV=prod mix compile
       - save_cache:
-          key: dependency-cache-{{.Branch}}
+          key: dependency-cache-{{.Branch}}-{{checksum "mix.lock"}}
           paths:
             - _build
       - run: MIX_ENV=test mix ecto.create
       - run: MIX_ENV=test mix ecto.migrate
       # - run: mix format --check-formatted
       - run: mix coveralls.circle
+
+workflows:
+  version: 2
+  build_test:
+    jobs:
+      - build

@@ -1,6 +1,5 @@
-defmodule AiWeb.UnauthenticatedUserControllerTest do
+defmodule AiWeb.API.V1.UserControllerTest do
   use AiWeb.ConnCase
-
   alias Ai.Credential
 
   @valid_attrs %{
@@ -12,13 +11,20 @@ defmodule AiWeb.UnauthenticatedUserControllerTest do
   @invalid_attrs %{}
 
   setup %{conn: conn} do
-    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+    conn =
+      conn
+      |> put_req_header("accept", "application/vnd.api+json")
+      |> put_req_header("content-type", "application/vnd.api+json")
+    {:ok, conn: conn}
   end
 
   test "creates and renders resource when data is valid", %{conn: conn} do
     conn =
-      post(conn, unauthenticated_user_path(conn, :create), %{
-        data: %{type: "users", attributes: @valid_attrs}
+      post(conn, user_path(conn, :create), %{
+        data: %{
+          type: "users",
+          attributes: @valid_attrs
+        }
       })
 
     assert json_response(conn, 201)["data"]["id"]
@@ -28,7 +34,7 @@ defmodule AiWeb.UnauthenticatedUserControllerTest do
   test "does not create resource and renders errors when data is empty", %{conn: conn} do
     assert_error_sent(400, fn ->
       _conn =
-        post(conn, unauthenticated_user_path(conn, :create), %{
+        post(conn, user_path(conn, :create), %{
           data: %{type: "users", attributes: @invalid_attrs}
         })
     end)
@@ -38,7 +44,7 @@ defmodule AiWeb.UnauthenticatedUserControllerTest do
   test "does not create resource and renders errors when email is too short: a@b.c", %{conn: conn} do
     assert_error_sent(400, fn ->
       _conn =
-        post(conn, unauthenticated_user_path(conn, :create), %{
+        post(conn, user_path(conn, :create), %{
           data: %{
             type: "users",
             attributes: %{
@@ -55,7 +61,7 @@ defmodule AiWeb.UnauthenticatedUserControllerTest do
   test "does not create resource and renders errors when email is invalid: aXbb.cc", %{conn: conn} do
     assert_error_sent(400, fn ->
       _conn =
-        post(conn, unauthenticated_user_path(conn, :create), %{
+        post(conn, user_path(conn, :create), %{
           data: %{
             type: "users",
             attributes: %{
