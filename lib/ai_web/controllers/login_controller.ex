@@ -4,10 +4,10 @@ defmodule AiWeb.LoginController do
   """
   use AiWeb, :controller
   plug(Ueberauth)
-  alias Ai.Credential
-  alias Ai.User
+  alias Ai.Accounts
+  alias Ai.Accounts.User
   alias Ueberauth.Strategy.Helpers
-  require Logger
+
 
   def request(conn, _params) do
     render(conn, "request.html", callback_url: Helpers.callback_url(conn))
@@ -34,62 +34,16 @@ defmodule AiWeb.LoginController do
     user_changeset = User.changeset(%User{}, user_params)
     credential_params = get_credential_params(auth, provider, token)
 
-    case find_or_create_user(user_changeset, credential_params) do
-      {:ok, user} ->
+    case Accounts.find_or_create_user(user_changeset, credential_params) do
+      {:ok, _credential} ->
         url = get_redirect_url(credential_params.provider_uid, token)
 
         conn
-        |> put_session(:current_user, user)
         |> redirect(external: url)
 
       {:error, _reasons} ->
         conn
-        |> put_flash(:error, "Error signing in")
         |> redirect(to: "/")
-    end
-  end
-
-  defp find_or_create_user(user_changeset, credential_params) do
-    case Repo.get_by(
-           Credential,
-           provider: credential_params.provider,
-           provider_uid: credential_params.provider_uid
-         ) do
-      nil ->
-        # no user credential was found, insert a new user
-        {:ok, user} = Repo.insert(user_changeset)
-
-        credential_params =
-          credential_params
-          |> Map.put(:user_id, user.id)
-
-        # create and insert a new credential for that user
-        Credential.social_changeset(%Credential{}, credential_params)
-        |> Repo.insert()
-
-        # return the user
-        {:ok, user}
-
-      credential ->
-        # a credential was found from the OAuth provider with the same uid. User
-        # has previously logged in.
-        credential =
-          Ecto.Changeset.change(credential, provider_token: credential_params.provider_token)
-
-        # OAuth provider typically sends a fresh OAuth token. Update credential
-        # with the fresh one to lower the incidence of stale or expired tokens.
-        case Repo.update(credential) do
-          {:ok, credential} ->
-            # preload the credential
-            user = credential |> Repo.preload([:user])
-
-            # return the user
-            {:ok, user}
-
-          {:error, changeset} ->
-            # Something went wrong
-            {:error, changeset}
-        end
     end
   end
 

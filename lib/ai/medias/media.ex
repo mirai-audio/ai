@@ -1,8 +1,11 @@
-defmodule Ai.Media do
+defmodule Ai.Medias.Media do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ai.User
+  alias Ai.Accounts.User
 
+
+  # use a UUID as the primary key
+  @primary_key {:id, :binary_id, autogenerate: true}
 
   schema "medias" do
     belongs_to(:user, User)

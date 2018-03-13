@@ -1,7 +1,6 @@
-defmodule Ai.UserTest do
-  use Ai.ModelCase
-
-  alias Ai.User
+defmodule Ai.Accounts.UserTest do
+  use Ai.DataCase
+  alias Ai.Accounts.User
 
   @valid_attrs %{username: "a@bb.cc"}
   @valid_attrs_emoji %{username: "a🍔🎉.🍔🎉"}

@@ -1,7 +1,7 @@
-defmodule Ai.MediaTest do
-  use Ai.ModelCase
+defmodule Ai.Medias.MediaTest do
+  use Ai.DataCase
+  alias Ai.Medias.Media
 
-  alias Ai.Media
 
   @valid_attrs %{title: "some content", url: "some content"}
   @invalid_attrs %{}

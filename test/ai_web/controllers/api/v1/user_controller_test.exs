@@ -1,6 +1,6 @@
 defmodule AiWeb.API.V1.UserControllerTest do
   use AiWeb.ConnCase
-  alias Ai.Credential
+  alias Ai.Accounts.Credential
 
   @valid_attrs %{
     email: "a@bb.cc",

@@ -1,6 +1,6 @@
 defmodule AiWeb.API.V1.MediaControllerTest do
   use AiWeb.ConnCase
-  alias Ai.Media
+  alias Ai.Medias.Media
   alias Ai.Repo
 
   @valid_attrs %{title: "some content", url: "some content"}
@@ -52,7 +52,7 @@ defmodule AiWeb.API.V1.MediaControllerTest do
   @tag login_as: "yuuko"
   test "does not show resource and instead throw error when id is nonexistent", %{conn: conn} do
     assert_error_sent(404, fn ->
-      get(conn, media_path(conn, :show, -1))
+      get(conn, media_path(conn, :show, "5d2afd88-f403-43bf-a687-545bfb7a01a9"))
     end)
   end
 

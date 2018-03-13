@@ -1,6 +1,6 @@
 alias Ai.Repo
-alias Ai.Media
-alias Ai.User
+alias Ai.Medias.Media
+alias Ai.Accounts.User
 
 
 random_username = "ai_test_" <> Integer.to_string(Enum.random(1111..9999))

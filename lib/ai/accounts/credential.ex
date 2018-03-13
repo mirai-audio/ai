@@ -1,7 +1,7 @@
-defmodule Ai.Credential do
+defmodule Ai.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ai.User
+  alias Ai.Accounts.User
 
 
   schema "credentials" do
@@ -30,8 +30,25 @@ defmodule Ai.Credential do
     password_confirmation
   )
 
+
   @doc """
-  Builds a email auth changeset based on the `struct` and `params`.
+  Builds an email changeset based on the `struct` and `params`.
+  """
+  def changeset(struct, %{provider: provider} = params) when provider == "email" do
+    email_changeset(struct, params)
+  end
+
+
+  @doc """
+  Builds a social changeset based on the `struct` and `params`.
+  """
+  def changeset(struct, params \\ %{}) do
+    social_changeset(struct, params)
+  end
+
+
+  @doc """
+  Builds a email changeset based on the `struct` and `params`.
 
   If no params are supplied, an invalid changeset is returned without having
   performed any validation.
@@ -51,6 +68,7 @@ defmodule Ai.Credential do
     |> validate_confirmation(:password)
     |> hash_password()
   end
+
 
   @doc """
   Builds a social network changeset based on `struct` and `params`.

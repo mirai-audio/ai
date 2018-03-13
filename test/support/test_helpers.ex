@@ -6,8 +6,8 @@ defmodule Ai.TestHelpers do
        username: "testuser#{Base.encode16(:crypto.strong_rand_bytes(8))}",
      }, attrs)
 
-    %Ai.User{}
-    |> Ai.User.changeset(changes)
+    %Ai.Accounts.User{}
+    |> Ai.Accounts.User.changeset(changes)
     |> Repo.insert!()
   end
 

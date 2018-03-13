@@ -1,6 +1,5 @@
 defmodule AiWeb.API.V1.MediaController do
   use AiWeb, :controller
-  alias Ai.Media
   alias Ai.Medias
   alias JaSerializer.Params
   require Logger
@@ -12,26 +11,22 @@ defmodule AiWeb.API.V1.MediaController do
       conn
       |> Guardian.Plug.current_resource()
 
-    query = Media
-    query = from m in query, where: m.user_id == ^user.id
-    query = from m in query, order_by: m.title
-    query = from m in query, preload: :user
-    medias = Repo.all(query)
-
+    medias = Medias.list_medias_for_user(user)
     render(conn, "index.json-api", data: medias)
   end
 
-  def create(conn, %{"data" => data = %{"type" => "medias", "attributes" => _media_params}}) do
+  def create(conn, %{
+    "data" => data = %{
+      "type" => "medias",
+      "attributes" => _media_params
+    }
+  }) do
     user =
       conn
       |> Guardian.Plug.current_resource()
+    attrs = Params.to_attributes(data)
 
-    changeset =
-      user
-      |> Ecto.build_assoc(:medias)
-      |> Media.changeset(Params.to_attributes(data))
-
-    case Repo.insert(changeset) do
+    case Medias.create_media(user, attrs) do
       {:ok, media} ->
         Logger.info("created new media '#{media.title}'.")
 
@@ -48,18 +43,21 @@ defmodule AiWeb.API.V1.MediaController do
   end
 
   def show(conn, %{"id" => id}) do
-    media = Repo.get!(Media, id)
+    # any user can view any media (no private or permissions required)
+    media = Ai.Medias.get_media!(id)
     render(conn, "show.json-api", data: media)
   end
 
   def update(conn, %{
         "id" => id,
-        "data" => data = %{"type" => "medias", "attributes" => _media_params}
+        "data" => data = %{
+          "type" => "medias",
+          "attributes" => _media_params
+        }
       }) do
-    media = Repo.get!(Media, id)
-    changeset = Media.changeset(media, Params.to_attributes(data))
-
-    case Repo.update(changeset) do
+    media = Ai.Medias.get_media!(id)
+    attrs = Params.to_attributes(data)
+    case Medias.update_media(media, attrs) do
       {:ok, media} ->
         render(conn, "show.json-api", data: media)
 
@@ -75,7 +73,8 @@ defmodule AiWeb.API.V1.MediaController do
       conn
       |> Guardian.Plug.current_resource()
 
-    media = Medias.get_media!(user, id)
+    # user must own media to be allowed to delete it
+    media = Medias.get_user_media!(user, id)
     {:ok, _media} = Medias.delete_media(media)
 
     # http://jsonapi.org/format/#crud-deleting-responses-204

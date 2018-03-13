@@ -1,8 +1,8 @@
-defmodule Ai.User do
+defmodule Ai.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ai.Credential
-  alias Ai.Media
+  alias Ai.Accounts.Credential
+  alias Ai.Medias.Media
 
 
   schema "users" do

@@ -1,7 +1,7 @@
-defmodule Ai.CredentialTest do
-  use Ai.ModelCase
+defmodule Ai.Accounts.CredentialTest do
+  use Ai.DataCase
 
-  alias Ai.Credential
+  alias Ai.Accounts.Credential
 
   @valid_attrs %{
     user_id: 1,

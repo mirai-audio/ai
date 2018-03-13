@@ -3,7 +3,7 @@ defmodule Ai.Repo.Migrations.CreateCredential do
 
   def change do
     create table(:credentials) do
-      add :user_id, references(:users)
+      add :user_id, references(:users, on_delete: :delete_all), null: false
 
       add :provider, :string
       add :provider_uid, :string
