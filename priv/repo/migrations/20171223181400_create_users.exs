@@ -3,7 +3,7 @@ defmodule Ai.Repo.Migrations.CreateUser do
 
   def change do
     create table(:users) do
-      add :username, :string, size: 15  # Twitter has 15, for historic reasons
+      add :username, :string, size: 50  # Twitter has 50, for historic reasons
 
       timestamps()
     end
