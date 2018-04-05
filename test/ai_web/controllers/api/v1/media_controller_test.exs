@@ -3,8 +3,9 @@ defmodule AiWeb.API.V1.MediaControllerTest do
   alias Ai.Medias.Media
   alias Ai.Repo
 
-  @valid_attrs %{title: "some content", url: "some content"}
+  @valid_attrs %{title: "some content", url: "https://www.youtube.com/watch?v=some_content"}
   @invalid_attrs %{}
+  @invalid_attrs_nil %{title: nil, url: nil}
 
   setup %{conn: conn} = config do
     if username = config[:login_as] do
@@ -39,7 +40,7 @@ defmodule AiWeb.API.V1.MediaControllerTest do
 
   @tag login_as: "john"
   test "shows chosen resource", %{conn: conn, user: user} do
-    media_attrs = %{title: "blah", url: "https://"}
+    media_attrs = %{title: "blah", url: "https://www.youtube.com/watch?v=blah"}
     media = help_insert_media(user, media_attrs)
     conn = get(conn, media_path(conn, :show, media))
     data = json_response(conn, 200)["data"]
@@ -89,7 +90,7 @@ defmodule AiWeb.API.V1.MediaControllerTest do
 
   @tag login_as: "akira"
   test "updates and renders chosen resource when data is valid", %{conn: conn} do
-    media = Repo.insert!(%Media{})
+    media = Repo.insert!(%Media{title: "akira", url: "https://youtu.be/akira"})
 
     conn =
       put(conn, media_path(conn, :update, media), %{
@@ -108,7 +109,7 @@ defmodule AiWeb.API.V1.MediaControllerTest do
 
   @tag login_as: "Genevieve"
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do
-    media = Repo.insert!(%Media{})
+    media = Repo.insert!(%Media{title: "asdf", url: "https://youtu.be/asdf"})
 
     conn =
       put(conn, media_path(conn, :update, media), %{
@@ -116,7 +117,7 @@ defmodule AiWeb.API.V1.MediaControllerTest do
         "data" => %{
           "type" => "medias",
           "id" => media.id,
-          "attributes" => @invalid_attrs,
+          "attributes" => @invalid_attrs_nil,
           "relationships" => relationships()
         }
       })
@@ -126,7 +127,7 @@ defmodule AiWeb.API.V1.MediaControllerTest do
 
   @tag login_as: "Abelard"
   test "deletes chosen resource", %{conn: conn, user: user} do
-    media_attrs = %{title: "blah", url: "https://"}
+    media_attrs = %{title: "blah 2", url: "https://www.youtube.com/watch?v=blah2"}
     media = help_insert_media(user, media_attrs)
     conn = delete(conn, media_path(conn, :delete, media))
     assert response(conn, 204)

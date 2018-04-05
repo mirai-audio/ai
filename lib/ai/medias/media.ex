@@ -2,6 +2,7 @@ defmodule Ai.Medias.Media do
   use Ecto.Schema
   import Ecto.Changeset
   alias Ai.Accounts.User
+  alias Ai.MediaProvider
 
 
   # use a UUID as the primary key
@@ -10,6 +11,7 @@ defmodule Ai.Medias.Media do
   schema "medias" do
     belongs_to(:user, User)
 
+    field(:provider, :string)
     field(:provider_uid, :string)
     field(:title, :string)
     field(:url, :string)
@@ -17,29 +19,28 @@ defmodule Ai.Medias.Media do
     timestamps()
   end
 
-  @required_fields ~w(title url)
-  @optional_fields ~w(provider_uid)
+  @required_fields ~w(title url provider provider_uid)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_fields ++ @optional_fields)
-    |> extract_provider_uid()
-    |> validate_required([:title, :url])
+    |> cast(params, @required_fields)
+    |> extract_url_details()
+    |> validate_required([:provider, :provider_uid, :title, :url])
   end
 
-  defp extract_provider_uid(changeset) do
+  defp extract_url_details(changeset) do
     url = Ecto.Changeset.get_field(changeset, :url)
-    provider_uid = get_provider_uid(url)
-    Ecto.Changeset.put_change(changeset, :provider_uid, provider_uid)
-  end
-
-  defp get_provider_uid(nil), do: nil
-  defp get_provider_uid(url) do
-    ~r{^.*(?:youtu\.be/|\w+/|v=)(?<id>[^#&?]*)}
-    |> Regex.named_captures(url)
-    |> get_in(["id"])
+    case MediaProvider.parse!(url) do
+      %MediaProvider{provider: provider, provider_uid: provider_uid} ->
+        changeset
+        |> Ecto.Changeset.put_change(:provider, provider)
+        |> Ecto.Changeset.put_change(:provider_uid, provider_uid)
+      {:error, message} ->
+        changeset
+        |> Ecto.Changeset.add_error(:provider, message)
+    end
   end
 end

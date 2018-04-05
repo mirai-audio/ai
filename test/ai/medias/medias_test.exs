@@ -7,8 +7,8 @@ defmodule Ai.Medias.MediasTest do
   describe "medias" do
     alias Ai.Medias.Media
 
-    @valid_media_attrs %{title: "test song", url: "http://example.com"}
-    @valid_media_update_attrs %{title: "updated song", url: "http://t.co"}
+    @valid_media_attrs %{title: "test song", url: "https://www.youtube.com/watch?v=kMHXd_iMGRU"}
+    @valid_media_update_attrs %{title: "updated song", url: "https://youtu.be/kMHXd_iMGRU"}
     @invalid_media_attrs %{title: nil, url: nil}
     @valid_user_attrs %{username: "test-user"}
 
@@ -30,8 +30,10 @@ defmodule Ai.Medias.MediasTest do
     test "create_media/1 with valid data creates a media" do
       user = user_fixture()
       assert {:ok, %Media{} = audio} = Medias.create_media(user, @valid_media_attrs)
+      assert audio.provider == "youtube"
+      assert audio.provider_uid == "kMHXd_iMGRU"
       assert audio.title == "test song"
-      assert audio.url == "http://example.com"
+      assert audio.url == "https://www.youtube.com/watch?v=kMHXd_iMGRU"
     end
 
     test "delete_media/1 deletes the media" do
@@ -65,7 +67,7 @@ defmodule Ai.Medias.MediasTest do
       assert {:ok, media} = Medias.update_media(media, @valid_media_update_attrs)
       assert %Media{} = media
       assert media.title == "updated song"
-      assert media.url == "http://t.co"
+      assert media.url == "https://youtu.be/kMHXd_iMGRU"
     end
 
     test "update_media/2 with invalid data returns error changeset" do
