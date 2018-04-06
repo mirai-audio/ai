@@ -24,7 +24,9 @@ defmodule AiWeb.API.V1.MediaController do
     user =
       conn
       |> Guardian.Plug.current_resource()
-    attrs = Params.to_attributes(data)
+    attrs = data
+    |> Params.to_attributes()
+    |> Map.take(["title", "url"])
 
     case Medias.create_media(user, attrs) do
       {:ok, media} ->
