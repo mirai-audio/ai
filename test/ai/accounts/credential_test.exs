@@ -53,6 +53,26 @@ defmodule Ai.Accounts.CredentialTest do
     password: "aaabbbcccddd",
     password_confirmation: "aaabbbccc"
   }
+  @valid_social_attrs %{
+    user_id: 1,
+    provider: "twitter",
+    provider_uid: "011812196",
+  }
+  @invalid_social_attrs_provider %{
+    user_id: 1,
+    provider: "myspace",
+    provider_uid: "011812196",
+  }
+  @invalid_social_attrs_provider_uid %{
+    user_id: 1,
+    provider: "twitter",
+    provider_uid: "",
+  }
+
+  test "changeset with valid attributes: a@bb.cc" do
+    changeset = Credential.changeset(%Credential{}, @valid_attrs)
+    assert changeset.valid?
+  end
 
   test "email_changeset with valid attributes: a@bb.cc" do
     changeset = Credential.email_changeset(%Credential{}, @valid_attrs)
@@ -91,6 +111,21 @@ defmodule Ai.Accounts.CredentialTest do
 
   test "email_changeset with wrong password confirmation" do
     changeset = Credential.email_changeset(%Credential{}, @invalid_attrs_bad_pw_confirm)
+    refute changeset.valid?
+  end
+
+  test "social_changeset with valid attributes" do
+    changeset = Credential.changeset(%Credential{}, @valid_social_attrs)
+    assert changeset.valid?
+  end
+
+  test "social_changeset with invalid provider attribute" do
+    changeset = Credential.changeset(%Credential{}, @invalid_social_attrs_provider)
+    refute changeset.valid?
+  end
+
+  test "social_changeset with invalid provider_uid attribute" do
+    changeset = Credential.changeset(%Credential{}, @invalid_social_attrs_provider_uid)
     refute changeset.valid?
   end
 end
