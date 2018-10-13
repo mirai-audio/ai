@@ -24,22 +24,25 @@ You will need the following tools properly installed:
 
 ```bash
 # macOS
-brew install elixir       # installs Erlang & Elixir
-brew cask install docker  # required to run PostgreSQL
-mix local.hex             # install hex package manager
+brew install elixir  # installs Erlang & Elixir
+brew install docker  # required to run PostgreSQL
+mix local.hex        # install hex package manager
+mix local.rebar      # install rebar
+mix deps.get         # install app dependencies
 ```
 
 
 ## Running / Development
 
-Run the PostgreSQL db server in Docker.
+Run the PostgreSQL (10.5) db server in Docker. Connect with `postgres@localhost`
+with password `postgres` for local development.
 
 ```bash
 docker run -it -p 5432:5432 --rm \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
   -e POSTGRES_DB=postgres \
-  --name postgres \
+  --name postgres:10.5 \
   postgres
 ```
 

@@ -57,7 +57,7 @@ defmodule Ai.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:phoenix_html, "~> 2.10"},
-      {:postgrex, ">= 0.11.1"},
+      {:postgrex, ">= 0.13.5"},
       {:gettext, "~> 0.11"},
       {:corsica, "~> 0.5"},
       {:ja_serializer, "~> 0.12"},
