@@ -42,8 +42,8 @@ docker run -it -p 5432:5432 --rm \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
   -e POSTGRES_DB=postgres \
-  --name postgres:10.5 \
-  postgres
+  --name postgres \
+  postgres:10.5
 ```
 
 
