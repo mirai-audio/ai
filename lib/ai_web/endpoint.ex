@@ -8,8 +8,13 @@ defmodule AiWeb.Endpoint do
     origins: [
       "https://mirai.audio",
       "https://api.mirai.audio",
+      "https://stg.mirai.audio",
+      "https://prd.mirai.audio",
       "https://app.mirai.audio",
+      "http://dev.mirai.audio",
+      "http://dev.mirai.audio:4200",
       "http://localhost:3000",
+      "http://127.0.0.1:4200",
       "http://localhost:4200"
     ],
     max_age: 600,

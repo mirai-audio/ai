@@ -50,7 +50,8 @@ docker run -it -p 5432:5432 --rm \
 ### Environment variables
 
 The following environment variables are available to override fallback (dev)
-configuration, it works best to add them to a `.env` file.
+configuration, it works best to add them to a `.env` file. Please see `.env.example`
+for examples.
 
 ```bash
 ENV_AI_MIR_URL=https://mirai.audio       # URL of Mir, frontend

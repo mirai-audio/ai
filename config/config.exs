@@ -53,7 +53,7 @@ config :ueberauth, Ueberauth.Strategy.Twitter.OAuth,
   callback_path: "/auth/twitter/callback",
   consumer_key: System.get_env("ENV_AI_TWITTER_CONSUMER_KEY") || "changeme",
   consumer_secret: System.get_env("ENV_AI_TWITTER_CONSUMER_SECRET") || "changeme",
-  redirect_uri: System.get_env("ENV_AI_TWITTER_REDIRECT_URI") || "http://localhost:4200/login"
+  redirect_uri: System.get_env("ENV_AI_TWITTER_REDIRECT_URI") || "http://127.0.0.1:4200/login"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
