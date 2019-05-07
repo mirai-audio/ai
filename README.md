@@ -76,6 +76,21 @@ export $(cat .env | xargs) && \
 
 Now you can visit [localhost:4000](localhost:4000) from your browser.
 
+
+### Social Authentication
+
+The client app, Mir can use Twitter OAuth 1.0a to authenticate users using the
+"Sign in with Twitter" API feature. To develop to this API, create a Twitter
+developers account, and register a twitter app. You'll need to enable "Sign in
+with Twitter" and set a callback URL:
+
+`https://app.mirai.audio/login/twitter/callback` will be used in production, and
+`http://dev.mirai.audio:4000/login/twitter/callback` will be used for local
+development. Make sure you add an entry in your `/etc/hosts` file pointing
+`127.0.0.1` to `dev.mirai.audio` as twitter does not allow OAuth redirects back
+to `localhost`.
+
+
 ### Running Tests
 
 ```bash
